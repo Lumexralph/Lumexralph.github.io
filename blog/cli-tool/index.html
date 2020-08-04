@@ -109,7 +109,7 @@
           <h5 class="font-secondary">Published on Feb 14, 2020 by <span class="text-primary">Olumide Ogundele</span></h5>
           <div class="content">
             <img src="https://lumexralph.github.io./images/blog/cli.jpg" alt="post-thumb" class="img-fluid rounded center mr-5 mb-4">
-            <p>I have always loved how Unix/Linux tools work when using them in the terminal. I had reasons to build a CLI tool with Python which I used to start up any project with Git initialized some time ago <a href="https://github.com/Lumexralph/wset">ws</a>, it doesn't do much. Recently, I got the inspiration to build a multipurpose unit-converter CLI tool taking the inspiration from Google's unit converter, I had to move away from my terminal often to do some conversions and I thought if I had a tool that will avoid leaving the terminal and maintain my focus, this led to creating <code>uconv </code>.</p>
+            <p>I have always loved how Unix/Linux tools work when using them in the terminal. I had reasons to build a CLI tool with Python which I used to start up any project with Git initialized some time ago <a href="https://github.com/Lumexralph/wset">ws</a>, it doesn't do much. Recently, I got the inspiration to build a multipurpose unit-converter CLI tool taking the inspiration from Google's unit converter, I had to move away from my terminal often to do some conversions and I thought if I had a tool that will avoid leaving the terminal and maintain my focus, this led to creating <code>uconv</code>.</p>
 <blockquote>
 <p>A command-line interface (CLI) processes commands to a computer program in the form of lines of text. The program which handles the interface is called a command-line interpreter or command-line processor. Operating systems implement a command-line interface in a shell for interactive access to operating system functions or services. Such access was primarily provided to users by computer terminals starting in the mid-1960s, and continued to be used throughout the 1970s and 1980s till today on Windows, Unix systems and personal computer systems.</p>
 </blockquote>
@@ -117,167 +117,161 @@
 <p>Uconv is also a CLI tool written with <a href="http://golang.org/">Go</a> and <a href="https://github.com/spf13/cobra">Cobra</a>, the full repository can be found <a href="https://github.com/Lumexralph/uconv">here</a>.</p>
 <h3 id="design-of-uconv">Design of uconv</h3>
 <p>I want to be able to create a user experience of uconv by doing the following in the terminal</p>
-<p><code>uncon temperature 100 --from=c --to=k</code></p>
-<p>and get the following output</p>
-<p><code>temperature: 30°C ==&gt; 303K</code></p>
-<p>The anatomy of the command is this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    uconv temperature <span style="color:#ae81ff">100</span> --from<span style="color:#f92672">=</span>c --to<span style="color:#f92672">=</span>k
+</code></pre></div><p>and get the following output</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    temperature: 30°C <span style="color:#f92672">=</span><span style="color:#f92672">=</span>&gt; 303K<span style="color:#e6db74">`</span>
+</code></pre></div><p>The anatomy of the command is this</p>
 <blockquote>
 <p>[command] [subcommand] [argument] &ndash;flags</p>
-</blockquote>
-<blockquote>
-<p>uconv temperature 100 &ndash;from=c &ndash;to=k</p>
 </blockquote>
 <h3 id="getting-started">Getting Started</h3>
 <p>Install Go from <a href="https://golang.org/">here</a></p>
 <p>create a directory called whatever name you want, I'll use - uconv and open it with your code editor or IDE, I'll use <a href="https://code.visualstudio.com/">VS Code</a></p>
-<p><code>mkdir uconv &amp;&amp; cd uconv &amp;&amp; code .</code></p>
-<p>Initialise go modules for ease of package or dependency management in your project, it will create a <code>go.mod</code> and <code>go.sum</code> file when you start installing packages.</p>
-<p><code>go mod init</code></p>
-<p>Install Cobra into the project</p>
-<p><code>go get -u github.com/spf13/cobra/cobra</code></p>
-<p>If you follow the usage guideline of Cobra, you'll find that you can bootstrap your project with it</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    mkdir uconv <span style="color:#f92672">&amp;&amp;</span> cd uconv <span style="color:#f92672">&amp;&amp;</span> code .
+</code></pre></div><p>Initialise go modules for ease of package or dependency management in your project, it will create a <code>go.mod</code> and <code>go.sum</code> file when you start installing packages.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    go mod init
+</code></pre></div><p>Install Cobra into the project</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">go get -u github.com/spf13/cobra/cobra
+</code></pre></div><p>If you follow the usage guideline of Cobra, you'll find that you can bootstrap your project with it</p>
 <p><code>cobra init --pkg-name &lt;your project directory&gt;</code> like <code>github.com/Lumexralph/uconv</code></p>
 <p>When the files and directories are created, we can proceed by working on the base command <code>cmd/root.go</code> file to look like this</p>
-<pre><code>// rootCmd represents the base command when called without any subcommands
-var rootCmd = &amp;cobra.Command{
-    Use:   &quot;uconv&quot;,
-    Short: &quot;A multi-purpose unit converter&quot;,
-    Long: `uconv is a CLI tool that helps you convert a value from one unit to another
-    It can be used for temperature, weight, area, length, currency`,
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// rootCmd represents the base command when called without any subcommands
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">rootCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
+    <span style="color:#a6e22e">Use</span>:   <span style="color:#e6db74">&#34;uconv&#34;</span>,
+    <span style="color:#a6e22e">Short</span>: <span style="color:#e6db74">&#34;A multi-purpose unit converter&#34;</span>,
+    <span style="color:#a6e22e">Long</span>: <span style="color:#e6db74">`</span><span style="color:#e6db74">uconv is a CLI tool that helps you convert a value from one unit to another
+</span><span style="color:#e6db74">    It can be used for temperature, weight, area, length, currency</span><span style="color:#e6db74">`</span>,
 }
 
-// Execute adds all child commands to the root command and sets flags appropriately.
-// This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
-    if err := rootCmd.Execute(); err != nil {
-        fmt.Println(err)
-        os.Exit(1)
+<span style="color:#75715e">// Execute adds all child commands to the root command and sets flags appropriately.
+</span><span style="color:#75715e"></span><span style="color:#75715e">// This is called by main.main(). It only needs to happen once to the rootCmd.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">Execute</span>() {
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">rootCmd</span>.<span style="color:#a6e22e">Execute</span>(); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+        <span style="color:#a6e22e">os</span>.<span style="color:#a6e22e">Exit</span>(<span style="color:#ae81ff">1</span>)
     }
 }
-</code></pre><p>When you're done, run the command to install the package as an executable in your local environment</p>
-<p><code>go install .</code></p>
-<p>If all goes fine, you should be able to be able to use &ldquo;uconv&rdquo; in the terminal like you do with <code>ls, pwd, grep</code> etc&hellip; You can try it out, you should get something similar to this output, it might not be exact</p>
-<pre><code>uconv is a CLI tool that helps you convert a value from one unit to another
-    It can be used for temperature, weight, area, length, currency
+</code></pre></div><p>When you're done, run the command to install the package as an executable in your local environment</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    go install .
+</code></pre></div><p>If all goes fine, you should be able to be able to use &ldquo;uconv&rdquo; in the terminal like you do with <code>ls, pwd, grep</code> etc&hellip; You can try it out, you should get something similar to this output, it might not be exact</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">    uconv is a CLI tool that helps you convert a value from one unit to another
+        It can be used <span style="color:#66d9ef">for</span> temperature, weight, area, length, currency
 
-Usage:
-uconv [command]
+    Usage:
+    uconv <span style="color:#f92672">[</span>command<span style="color:#f92672">]</span>
 
-Available Commands:
-help        Help about any command
-length      Convert length for different units
-temperature Convert temperature for different units
+    Available Commands:
+    help        Help about any command
+    length      Convert length <span style="color:#66d9ef">for</span> different units
+    temperature Convert temperature <span style="color:#66d9ef">for</span> different units
 
-Flags:
-    --config string   config file (default is $HOME/.uconv.yaml)
--h, --help            help for uconv
+    Flags:
+        --config string   config file <span style="color:#f92672">(</span>default is $HOME/.uconv.yaml<span style="color:#f92672">)</span>
+    -h, --help            help <span style="color:#66d9ef">for</span> uconv
 
-Use &quot;uconv [command] --help&quot; for more information about a command.
-</code></pre>
-<p>The final interesting part is creating the temperature sub-command, add another file called whatever name you want, I will use <code>temperature.go</code> in the cmd directory.</p>
+    Use <span style="color:#e6db74">&#34;uconv [command] --help&#34;</span> <span style="color:#66d9ef">for</span> more information about a command.
+</code></pre></div><p>The final interesting part is creating the temperature sub-command, add another file called whatever name you want, I will use <code>temperature.go</code> in the cmd directory.</p>
 <p>Create your flags and add it it to the sub-command which in our case is temperature packaged as <code>tempCmd</code></p>
-<pre><code>var tempTo, tempFrom string
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tempTo</span>, <span style="color:#a6e22e">tempFrom</span> <span style="color:#66d9ef">string</span>
 
-// special function that gets executed when the app is being compiled,
-func init() {
-    // create your flags --from and --to or -f or -t
-    tempCmd.Flags().StringVarP(&amp;tempFrom, &quot;from&quot;, &quot;f&quot;, &quot;c&quot;, &quot;the unit to convert from&quot;)
-    tempCmd.Flags().StringVarP(&amp;tempTo, &quot;to&quot;, &quot;t&quot;, &quot;f&quot;, &quot;the unit to convert to&quot;)
+ <span style="color:#75715e">// special function that gets executed when the app is being compiled,
+</span><span style="color:#75715e"></span> <span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+     <span style="color:#75715e">// create your flags --from and --to or -f or -t
+</span><span style="color:#75715e"></span>     <span style="color:#a6e22e">tempCmd</span>.<span style="color:#a6e22e">Flags</span>().<span style="color:#a6e22e">StringVarP</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tempFrom</span>, <span style="color:#e6db74">&#34;from&#34;</span>, <span style="color:#e6db74">&#34;f&#34;</span>, <span style="color:#e6db74">&#34;c&#34;</span>, <span style="color:#e6db74">&#34;the unit to convert from&#34;</span>)
+     <span style="color:#a6e22e">tempCmd</span>.<span style="color:#a6e22e">Flags</span>().<span style="color:#a6e22e">StringVarP</span>(<span style="color:#f92672">&amp;</span><span style="color:#a6e22e">tempTo</span>, <span style="color:#e6db74">&#34;to&#34;</span>, <span style="color:#e6db74">&#34;t&#34;</span>, <span style="color:#e6db74">&#34;f&#34;</span>, <span style="color:#e6db74">&#34;the unit to convert to&#34;</span>)
 
-    // add the temperature command to the the root command
-    rootCmd.AddCommand(tempCmd)
-}
-</code></pre>
-<p>We have the tempCmd created below, it follows the same pattern as the <code>rootCommand.</code></p>
-<pre><code>var tempCmd = &amp;cobra.Command{
-Use:   &quot;temperature&quot;,
-Short: &quot;Convert temperature for different units&quot;,
-Long: `temperature is a sub-command for uconv (unit converter).
+     <span style="color:#75715e">// add the temperature command to the the root command
+</span><span style="color:#75715e"></span>     <span style="color:#a6e22e">rootCmd</span>.<span style="color:#a6e22e">AddCommand</span>(<span style="color:#a6e22e">tempCmd</span>)
+ }
+</code></pre></div><p>We have the tempCmd created below, it follows the same pattern as the <code>rootCommand.</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go">    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">tempCmd</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>{
+    <span style="color:#a6e22e">Use</span>:   <span style="color:#e6db74">&#34;temperature&#34;</span>,
+    <span style="color:#a6e22e">Short</span>: <span style="color:#e6db74">&#34;Convert temperature for different units&#34;</span>,
+    <span style="color:#a6e22e">Long</span>: <span style="color:#e6db74">`</span><span style="color:#e6db74">temperature is a sub-command for uconv (unit converter).
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    It helps to convert temperature from one unit to another, Kelvin - k,
+</span><span style="color:#e6db74">    Fahrenheit - f and Celsius - c.
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    If no flags are specified, it converts Celsius - c to Fahrenheit - f by default.
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">    Usage:
+</span><span style="color:#e6db74">        uconv temperature 45
+</span><span style="color:#e6db74">        uconv temperature 45 --from f --to c
+</span><span style="color:#e6db74">        uconv temperature 45 -f f -t c
+</span><span style="color:#e6db74">    </span><span style="color:#e6db74">`</span>,
+    <span style="color:#a6e22e">Args</span>: <span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">ExactArgs</span>(<span style="color:#ae81ff">1</span>),
+    <span style="color:#a6e22e">Run</span>:  <span style="color:#a6e22e">executeTemperatureCmd</span>,
+    }
 
-It helps to convert temperature from one unit to another, Kelvin - k,
-Fahrenheit - f and Celsius - c.
-
-If no flags are specified, it converts Celsius - c to Fahrenheit - f by default.
-
-Usage:
-    uconv temperature 45
-    uconv temperature 45 --from f --to c
-    uconv temperature 45 -f f -t c
-`,
-Args: cobra.ExactArgs(1),
-Run:  executeTemperatureCmd,
-}
-</code></pre>
-<p>Use:   &ldquo;temperature&rdquo; is the name of my sub-command to be able to achieve this</p>
-<p><code>uconv temperature </code></p>
-<p>Short: &ldquo;Convert temperature for different units&rdquo;, is the short description you get when you typed just uconv in the terminal. While Long is the description of what the command does when you type the following</p>
-<p><code>uconv temperature --h or -h</code></p>
-<p>Args: <code>cobra.ExactArgs(1)</code>, was used because I only wanted just one value or argument provided since I just want to convert one value to another value, and the best part for me is where the logic happens</p>
+</code></pre></div><p>Use:   &ldquo;temperature&rdquo; is the name of my sub-command to be able to achieve this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">uconv temperature
+</code></pre></div><p>Short: &ldquo;Convert temperature for different units&rdquo;, is the short description you get when you typed just uconv in the terminal. While Long is the description of what the command does when you type the following</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">uconv temperature --h or -h
+</code></pre></div><p><strong>Args</strong>: <code>cobra.ExactArgs(1)</code>, was used because I only wanted just one value or argument provided since I just want to convert one value to another value, and the best part for me is where the logic happens</p>
 <p>Run:  executeTemperatureCmd, this will have a function with the required signature by Cobra, it will get run to respond to the temperature sub-command and since function is a first class citizen in Go, it can be passed as value like I did below.</p>
 <p>This is the function definition below</p>
-<pre><code>// executeTemperatureCmd - handles the temperature commands with respective flags
-func executeTemperatureCmd(cmd *cobra.Command, args []string) {
-    // convert the string to int
-    arg, err := strconv.ParseInt(args[0], 10, 64)
-    if err != nil {
-        fmt.Println(err)
-        return
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#75715e">// executeTemperatureCmd - handles the temperature commands with respective flags
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">executeTemperatureCmd</span>(<span style="color:#a6e22e">cmd</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">cobra</span>.<span style="color:#a6e22e">Command</span>, <span style="color:#a6e22e">args</span> []<span style="color:#66d9ef">string</span>) {
+    <span style="color:#75715e">// convert the string to int
+</span><span style="color:#75715e"></span>    <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">strconv</span>.<span style="color:#a6e22e">ParseInt</span>(<span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">64</span>)
+    <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>)
+        <span style="color:#66d9ef">return</span>
     }
 
-    switch {
-    case tempFrom == &quot;c&quot; &amp;&amp; tempTo == &quot;f&quot;:
-        fmt.Printf(&quot;temperature: %d°C ==&gt; %d°F\n&quot;, arg, celsiusToFahrenheit(arg))
-    case tempFrom == &quot;f&quot; &amp;&amp; tempTo == &quot;c&quot;:
-        fmt.Printf(&quot;temperature: %d°F ==&gt; %d°C\n&quot;, arg, fahrenheitToCelsius(arg))
-    case tempFrom == &quot;c&quot; &amp;&amp; tempTo == &quot;k&quot;:
-        fmt.Printf(&quot;temperature: %d°C ==&gt; %dK\n&quot;, arg, celsiusToKelvin(arg))
-    case tempFrom == &quot;f&quot; &amp;&amp; tempTo == &quot;k&quot;:
-        fmt.Printf(&quot;temperature: %d°F ==&gt; %dK\n&quot;, arg, fahrenheitToKelvin(arg))
-    case tempFrom == &quot;k&quot; &amp;&amp; tempTo == &quot;c&quot;:
-        fmt.Printf(&quot;temperature: %dK ==&gt; %d°C\n&quot;, arg, kelvinToCelsius(arg))
-    case tempFrom == &quot;k&quot; &amp;&amp; tempTo == &quot;f&quot;:
-        fmt.Printf(&quot;temperature: %dK ==&gt; %d°F\n&quot;, arg, kelvinToFahrenheit(arg))
-    case tempFrom == tempTo:
-        fmt.Printf(&quot;temperature: %d%s\n&quot;, arg, tempTo)
+    <span style="color:#66d9ef">switch</span> {
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;f&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %d°C ==&gt; %d°F\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">celsiusToFahrenheit</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;f&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %d°F ==&gt; %d°C\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">fahrenheitToCelsius</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;k&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %d°C ==&gt; %dK\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">celsiusToKelvin</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;f&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;k&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %d°F ==&gt; %dK\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">fahrenheitToKelvin</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;k&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;c&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %dK ==&gt; %d°C\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">kelvinToCelsius</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;k&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">tempTo</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;f&#34;</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %dK ==&gt; %d°F\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">kelvinToFahrenheit</span>(<span style="color:#a6e22e">arg</span>))
+    <span style="color:#66d9ef">case</span> <span style="color:#a6e22e">tempFrom</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">tempTo</span>:
+        <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;temperature: %d%s\n&#34;</span>, <span style="color:#a6e22e">arg</span>, <span style="color:#a6e22e">tempTo</span>)
     }
 }
 
-// celsiusToFahrenheit - converts Celsius to Fahrenheit
-func celsiusToFahrenheit(data int64) int64 {
-    return (data * 9 / 5) + 32
+<span style="color:#75715e">// celsiusToFahrenheit - converts Celsius to Fahrenheit
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">celsiusToFahrenheit</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">data</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">9</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">+</span> <span style="color:#ae81ff">32</span>
 }
 
-// celsiusToKelvin - converts Celsius to Kelvin
-func celsiusToKelvin(data int64) int64 {
-    return data + 273
+<span style="color:#75715e">// celsiusToKelvin - converts Celsius to Kelvin
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">celsiusToKelvin</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">273</span>
 }
 
-// fahrenheitToCelsius - converts Fahrenheit to Celsius
-func fahrenheitToCelsius(data int64) int64 {
-    return (data - 32) * 5 / 9
+<span style="color:#75715e">// fahrenheitToCelsius - converts Fahrenheit to Celsius
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fahrenheitToCelsius</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">data</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">32</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">9</span>
 }
 
-// fahrenheitToKelvin - converts Fahrenheit to Kelvin
-func fahrenheitToKelvin(data int64) int64 {
-    return (data-32)*5/9 + 273
+<span style="color:#75715e">// fahrenheitToKelvin - converts Fahrenheit to Kelvin
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">fahrenheitToKelvin</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">data</span><span style="color:#f92672">-</span><span style="color:#ae81ff">32</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">5</span><span style="color:#f92672">/</span><span style="color:#ae81ff">9</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">273</span>
 }
 
-// kelvinToCelsius - converts Kelvin to Celsius
-func kelvinToCelsius(data int64) int64 {
-    return data - 273
+<span style="color:#75715e">// kelvinToCelsius - converts Kelvin to Celsius
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">kelvinToCelsius</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">data</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">273</span>
 }
 
-// kelvinToFahrenheit - converts Kelvin to Fahrenheit
-func kelvinToFahrenheit(data int64) int64 {
-    return (data-273)*9/5 + 32
+<span style="color:#75715e">// kelvinToFahrenheit - converts Kelvin to Fahrenheit
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">kelvinToFahrenheit</span>(<span style="color:#a6e22e">data</span> <span style="color:#66d9ef">int64</span>) <span style="color:#66d9ef">int64</span> {
+    <span style="color:#66d9ef">return</span> (<span style="color:#a6e22e">data</span><span style="color:#f92672">-</span><span style="color:#ae81ff">273</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">9</span><span style="color:#f92672">/</span><span style="color:#ae81ff">5</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">32</span>
 }
-</code></pre>
+</code></pre></div><p>If you are able to get this far, you can recreate it for other sub-commands you might have. Please ensure to consult the Cobra's guidelines if you want more to your CLI tool and I will be glad to hear from you if you have any question or feedback, have fun!</p>
 <p>Before I go, here is a cool trick I do when i want to start a new project with VSCode, I created an alias using a function like this;</p>
-<p><code>alias np='function _newp(){ mkdir $1 &amp;&amp; cd $1 &amp;&amp; code .; };_newp'</code></p>
-<p>call the new command line alias like this</p>
-<p><code>np uconv</code></p>
-<p>If you are able to get this far, you can recreate it for other sub-commands you might have. Please ensure to consult the Cobra's guidelines if you want more to your CLI tool and I will be glad to hear from you if you have any question or feedback, have fun!</p>
-
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">alias np<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;function _newp(){ mkdir $1 &amp;&amp; cd $1 &amp;&amp; code .; };_newp&#39;</span>
+</code></pre></div><p>call the new command line alias like this</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"> np uconv
+</code></pre></div>
           </div>
         </div>
       </div>

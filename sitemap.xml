@@ -3,12 +3,17 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://lumexralph.github.io./blog/cli-tool/</loc>
-    <lastmod>2020-02-14T00:00:00+00:00</lastmod>
+    <loc>https://lumexralph.github.io./blog/linked-list/</loc>
+    <lastmod>2020-08-04T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://lumexralph.github.io./</loc>
+    <lastmod>2020-08-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://lumexralph.github.io./blog/cli-tool/</loc>
     <lastmod>2020-02-14T00:00:00+00:00</lastmod>
   </url>
   

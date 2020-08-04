@@ -6,10 +6,19 @@
     <description>Recent content on Olumide | Lumex Portfolio</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Aug 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://lumexralph.github.io./index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data Structures: Singly-Linked List with Go</title>
+      <link>https://lumexralph.github.io./blog/linked-list/</link>
+      <pubDate>Tue, 04 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://lumexralph.github.io./blog/linked-list/</guid>
+      <description>From my learning about Operating Systems, diving into the source code of Linux, seeing the data structures for p_threads, mutex, sockets etc.</description>
+    </item>
     
     <item>
       <title>Building a multipurpose CLI tool with Cobra and Go</title>
