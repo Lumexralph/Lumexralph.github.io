@@ -6,10 +6,19 @@
     <description>Recent content on Olumide | Lumex Portfolio</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 04 Aug 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 20 Sep 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://lumexralph.github.io./index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Data Structures: Binary Search Trees with Go</title>
+      <link>https://lumexralph.github.io./blog/binary-search-tree/</link>
+      <pubDate>Sun, 20 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://lumexralph.github.io./blog/binary-search-tree/</guid>
+      <description>In continuation of this exciting quest to learn more about data structures and algorithms, I will love to talk about binary search trees which builds on the knowledge last discussed on linked-list which is referenced from this book, you can find the post here.</description>
+    </item>
     
     <item>
       <title>Data Structures: Singly-Linked List with Go</title>
